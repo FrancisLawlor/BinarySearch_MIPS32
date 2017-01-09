@@ -1,10 +1,26 @@
 		.data
 testdata:	.word		2, 3, 4, 5, 6
+target:		.word		3
 		.text
 		.globl		main
 main:
-		la	$t0, testdata
-		lw	$t1, 0($t0)
+		la	$t0, testdata		# Load address of array containing test data.
+		
+		addi	$t1, $zero, 0		# Store 0 in register for start value.
+		addi	$t2, $zero, 16		# Store 16 in register for end value (4 * (length - 1))
+		
+		addi	$t3, $t1, 1		# Add 1 to start
+		
+startLoop:		
+		bgt	$t3, $t2, endLoop
+		beq	$t3, $t2, endLoop
+		
+		sub	$t4, $t2, $t1		# (end - start)
+		div	$t4, $t4, 2		# (end - start) / 2
+		add	$t5, $t1, $t4		# mid = start + ((end - start) / 2)
+		
+		jump	startLoop
+endLoop:	
 		
 		li	$v0, 10
 		syscall			
