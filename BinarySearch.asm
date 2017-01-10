@@ -22,6 +22,7 @@ startLoop:
 		add	$t5, $t1, $t4		# mid = start + ((end - start) / 2)
 		
 		add 	$t6, $t0, $t5		# testdata[mid]
+		sw	$t6, 0($t6)		# store value from testdata[mid]
 		
 		bgt	$s0, $t6, afterElse	# if (target > data[mid]) jump to afterElse
 		beq	$s0, $t6, afterElse	# if (target == data[mid]) jump to afterElse
@@ -33,5 +34,23 @@ afterElse:
 		j	startLoop
 endLoop:	
 		
+		add 	$t6, $t0, $t1		# testdata[start]
+		sw	$t6, 0($t6)		# store value at testdata[start]
+		
+		bne	$s0, $t6, notStart
+		addi	$s1, $zero, 1  
+notStart:	
+
+		add 	$t6, $t0, $t2		# testdata[end]
+		sw	$t6, 0($t6)		# store value at testdata[end]
+		
+		bne	$s0, $t6, notEnd
+		addi	$s1, $zero, 1 
+		j	finish
+notEnd:		
+	
+		addi	$s1, $zero, 0
+
+finish:	
 		li	$v0, 10
 		syscall			
