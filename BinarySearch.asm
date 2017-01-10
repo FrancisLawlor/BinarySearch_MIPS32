@@ -23,10 +23,14 @@ startLoop:
 		
 		add 	$t6, $t0, $t5		# testdata[mid]
 		
+		bgt	$s0, $t6, afterElse	# if (target > data[mid]) jump to afterElse
+		beq	$s0, $t6, afterElse	# if (target == data[mid]) jump to afterElse
 		
+		add	$t2, $zero, $t5		# end = mid
+		j 	startLoop
 afterElse:
-		
-		jump	startLoop
+		add	$t1, $zero, $t5		# start = mid
+		j	startLoop
 endLoop:	
 		
 		li	$v0, 10
