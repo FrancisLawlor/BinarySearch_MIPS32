@@ -1,12 +1,13 @@
 		.data
 testdata:	.word		2, 3, 4, 5, 6
-target:		.word		3
+target:		.word		4
+newline:	.asciiz "\n"			# New line character required for printing at the end
 		.text
 		.globl		main
 main:
 		la	$t0, testdata		# Load address of array containing test data
 		la	$s0, target		# Load address of target value
-		sw	$s0, 0($s0)		# Store target value
+		lw	$s0, 0($s0)		# Load target value
 		
 		addi	$t1, $zero, 0		# Store 0 in register for start value
 		addi	$t2, $zero, 4		# Store 4 in register for end value (length - 1)
@@ -24,7 +25,7 @@ startLoop:
 		mul	$t7, $t5, 4		# Multiply mid by word length to use as offset
 						
 		add 	$t6, $t0, $t7		# testdata[mid]
-		sw	$t6, 0($t6)		# store value from testdata[mid]
+		lw	$t6, 0($t6)		# Load value from testdata[mid]
 		
 		bgt	$s0, $t6, afterElse	# if (target > data[mid]) jump to afterElse
 		beq	$s0, $t6, afterElse	# if (target == data[mid]) jump to afterElse
@@ -39,7 +40,7 @@ endLoop:
 		mul	$t7, $t1, 4		# Multiply start by word length to use as offset
 		
 		add 	$t6, $t0, $t7		# testdata[start]
-		sw	$t6, 0($t6)		# store value at testdata[start]
+		lw	$t6, 0($t6)		# Load value at testdata[start]
 		
 		bne	$s0, $t6, notStart
 		addi	$s1, $zero, 1  
@@ -48,7 +49,7 @@ notStart:
 		mul	$t7, $t2, 4		# Multiply start by word length to use as offset
 				
 		add 	$t6, $t0, $t7		# testdata[end]
-		sw	$t6, 0($t6)		# store value at testdata[end]
+		lw	$t6, 0($t6)		# Load value at testdata[end]
 		
 		bne	$s0, $t6, notEnd
 		addi	$s1, $zero, 1 
