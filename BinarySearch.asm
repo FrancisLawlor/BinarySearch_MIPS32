@@ -1,7 +1,6 @@
 		.data
 testdata:	.word		2, 3, 4, 5, 6
-target:		.word		4
-newline:	.asciiz "\n"			# New line character required for printing at the end
+target:		.word		2
 		.text
 		.globl		main
 main:
@@ -42,8 +41,9 @@ endLoop:
 		add 	$t6, $t0, $t7		# testdata[start]
 		lw	$t6, 0($t6)		# Load value at testdata[start]
 		
-		bne	$s0, $t6, notStart
-		addi	$s1, $zero, 1  
+		bne	$s0, $t6, notStart	# If (target != testdata[start])
+		addi	$s1, $zero, 1 
+		j	finish
 notStart:	
 
 		mul	$t7, $t2, 4		# Multiply start by word length to use as offset
@@ -51,11 +51,10 @@ notStart:
 		add 	$t6, $t0, $t7		# testdata[end]
 		lw	$t6, 0($t6)		# Load value at testdata[end]
 		
-		bne	$s0, $t6, notEnd
+		bne	$s0, $t6, notEnd	# If (target != testdata[end])
 		addi	$s1, $zero, 1 
 		j	finish
 notEnd:		
-	
 		addi	$s1, $zero, 0
 
 finish:	
