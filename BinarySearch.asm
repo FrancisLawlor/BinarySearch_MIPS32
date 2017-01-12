@@ -4,13 +4,20 @@ target:		.word		2
 		.text
 		.globl		main
 main:
-		la	$t0, testdata		# Load address of array containing test data
+		la	$a0, testdata		# Load address of array containing test data
 		la	$s0, target		# Load address of target value
 		lw	$s0, 0($s0)		# Load target value
 		
 		addi	$t1, $zero, 0		# Store 0 in register for start value
 		addi	$t2, $zero, 4		# Store 4 in register for end value (length - 1)
 		
+		jal	BinarySearch		# Execute BinarySearch subroutine
+		
+		li	$v0, 10
+		syscall	
+		
+BinarySearch:
+
 startLoop:		
 		addi	$t3, $t1, 1		# Add 1 to start
 				
@@ -23,7 +30,7 @@ startLoop:
 		
 		mul	$t7, $t5, 4		# Multiply mid by word length to use as offset
 						
-		add 	$t6, $t0, $t7		# testdata[mid]
+		add 	$t6, $a0, $t7		# testdata[mid] 
 		lw	$t6, 0($t6)		# Load value from testdata[mid]
 		
 		bgt	$s0, $t6, afterElse	# if (target > data[mid]) jump to afterElse
@@ -38,7 +45,7 @@ endLoop:
 		
 		mul	$t7, $t1, 4		# Multiply start by word length to use as offset
 		
-		add 	$t6, $t0, $t7		# testdata[start]
+		add 	$t6, $a0, $t7		# testdata[start]
 		lw	$t6, 0($t6)		# Load value at testdata[start]
 		
 		bne	$s0, $t6, notStart	# If (target != testdata[start])
@@ -48,7 +55,7 @@ notStart:
 
 		mul	$t7, $t2, 4		# Multiply start by word length to use as offset
 				
-		add 	$t6, $t0, $t7		# testdata[end]
+		add 	$t6, $a0, $t7		# testdata[end]
 		lw	$t6, 0($t6)		# Load value at testdata[end]
 		
 		bne	$s0, $t6, notEnd	# If (target != testdata[end])
@@ -58,5 +65,4 @@ notEnd:
 		addi	$s1, $zero, 0
 
 finish:	
-		li	$v0, 10
-		syscall			
+		jr	$ra		
