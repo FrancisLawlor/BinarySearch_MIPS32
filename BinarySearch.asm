@@ -1,6 +1,8 @@
 		.data
 testdata:	.word		2, 3, 4, 5, 6
-target:		.word		2
+target:		.word		23
+absentMessage:	.ascii		" was not found."
+presentMessage:	.ascii		" was found."
 		.text
 		.globl		main
 main:
@@ -9,6 +11,9 @@ main:
 		lw	$a1, 0($s0)		# Load target value
 		
 		jal	BinarySearch		# Execute BinarySearch subroutine
+		
+		addi	$a2, $s1, 0
+		jal	OutputMessage		# Execute OutputMessage subroutine
 		
 		li	$v0, 10
 		syscall	
@@ -66,3 +71,28 @@ notEnd:
 
 finish:	
 		jr	$ra		
+
+OutputMessage:	
+		# Output target number
+		li	$v0, 1
+		add	$a0, $a1, 0		# Print current word from OutputArray
+		syscall
+				
+		bne	$a2, 0, present
+		
+absent:		
+		# Output message indicating absence of number
+		li	$v0, 4
+		la	$a0, absentMessage	
+		syscall
+		
+		j	OutputMessageEnd
+
+present:
+		# Output message indicating presence of number
+		li	$v0, 4
+		la	$a0, presentMessage	
+		syscall
+			
+OutputMessageEnd:
+		jr	$ra
