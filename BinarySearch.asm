@@ -77,7 +77,7 @@ OutputMessage:
 		add	$a0, $a1, 0		# Print target number to preface output message
 		syscall
 				
-		bne	$a2, 0, present
+		bne	$a2, 0, present		# Check register $a2 for presence of 0 (which would indicate the target number's absence)
 		
 absent:		
 		li	$v0, 4
