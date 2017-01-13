@@ -1,7 +1,7 @@
 		.data
-testdata:	.word		2, 3, 4, 5, 6
-target:		.word		23
+testdata:	.word		2, 3, 26, 39, 2689
 absentMessage:	.ascii		" was not found."
+target:		.word		39
 presentMessage:	.ascii		" was found."
 		.text
 		.globl		main
@@ -54,7 +54,7 @@ endLoop:
 		lw	$t6, 0($t6)		# Load value at testdata[start]
 		
 		bne	$a1, $t6, notStart	# If (target != testdata[start])
-		addi	$s1, $zero, 1 
+		addi	$s1, $zero, 1 		# Store 1 in register $s1, indicating presence of target value
 		j	finish
 		
 notStart:	
@@ -64,34 +64,31 @@ notStart:
 		lw	$t6, 0($t6)		# Load value at testdata[end]
 		
 		bne	$a1, $t6, notEnd	# If (target != testdata[end])
-		addi	$s1, $zero, 1 
+		addi	$s1, $zero, 1 		# Store 1 in register $s1, indicating presence of target value
 		j	finish
 notEnd:		
-		addi	$s1, $zero, 0
+		addi	$s1, $zero, 0		# Store 0 in register $s1, indicating absence of target value
 
 finish:	
 		jr	$ra		
 
 OutputMessage:	
-		# Output target number
 		li	$v0, 1
-		add	$a0, $a1, 0		# Print current word from OutputArray
+		add	$a0, $a1, 0		# Print target number to preface output message
 		syscall
 				
 		bne	$a2, 0, present
 		
 absent:		
-		# Output message indicating absence of number
 		li	$v0, 4
-		la	$a0, absentMessage	
+		la	$a0, absentMessage	# Output message indicating absence of number
 		syscall
 		
 		j	OutputMessageEnd
 
 present:
-		# Output message indicating presence of number
 		li	$v0, 4
-		la	$a0, presentMessage	
+		la	$a0, presentMessage	# Output message indicating presence of number
 		syscall
 			
 OutputMessageEnd:
