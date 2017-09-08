@@ -1,12 +1,12 @@
 		.data
-testdata:	.word		2, 3, 26, 39, 2689
+testData:	.word		2, 3, 26, 39, 2689
 absentMessage:	.ascii		" was not found."
 target:		.word		39
 presentMessage:	.ascii		" was found."
 		.text
 		.globl		main
 main:
-		la	$a0, testdata		# Load address of array containing test data
+		la	$a0, testData		# Load address of array containing test data
 		la	$s0, target		# Load address of target value
 		lw	$a1, 0($s0)		# Load target value
 		
